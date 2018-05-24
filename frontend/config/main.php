@@ -58,9 +58,11 @@ return [
                 [
                     'class' => 'yii\rest\UrlRule', 
                     'controller' => 'v1/doubts',
-                    'except' => ['delete', 'create', 'update', 'put', 'patch'],
                     'extraPatterns' => [
-                        'GET search' => 'search',
+                        'POST list' => 'list',
+                        'POST one' => 'one',
+                        'POST like' => 'like',
+                        'POST encourage' => 'encourage',
                     ]
                 ],
             ],
