@@ -21,4 +21,13 @@ class Module extends \yii\base\Module
 
         // custom initialization code goes here
     }
+
+    public function behaviors(){
+        return [
+            'access' => [
+                'class' => 'frontend\components\WxapiVeriyFilter',
+                'except' => ['v1/login']
+            ]
+        ];
+    }
 }
