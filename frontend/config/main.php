@@ -11,12 +11,21 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'modules' => [
+        'v1' => [
+            'class' => 'frontend\modules\v1\Module',
+        ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ]
+        ],
+        'response' => [
+            'format' => yii\web\Response::FORMAT_JSON,
+            'charset' => 'UTF-8',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -36,16 +45,24 @@ return [
                 ],
             ],
         ],
-        'errorHandler' => [
+        /*'errorHandler' => [
             'errorAction' => 'site/error',
-        ],
+        ],*/
         
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'enableStrictParsing' => true,
             'rules' => [
-                ['class' => 'yii\rest\UrlRule', 'controller' => 'v1/doubts'],
+                //'GET <module:(v)\d+>/<controller:\w+>/search' => '<module>/<controller>/search',
+                [
+                    'class' => 'yii\rest\UrlRule', 
+                    'controller' => 'v1/doubts',
+                    'except' => ['delete', 'create', 'update', 'put', 'patch'],
+                    'extraPatterns' => [
+                        'GET search' => 'search',
+                    ]
+                ],
             ],
         ],
         
