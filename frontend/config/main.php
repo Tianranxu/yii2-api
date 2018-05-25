@@ -62,7 +62,9 @@ return [
                         'POST list' => 'list',
                         'POST one' => 'one',
                         'POST like' => 'like',
+                        'POST unlike' => 'unlike',
                         'POST encourage' => 'encourage',
+                        'POST discourage' => 'discourage',
                     ]
                 ],
             ],
