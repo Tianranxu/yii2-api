@@ -17,6 +17,10 @@ class WxapiVeriyFilter extends ActionFilter {
         if (empty($loginUser)) {
             return false;
         }
+        $user = explode('`', $loginUser);
+        if ($user[0] != $request->post('uid')) {
+            return false;
+        }
         return parent::beforeAction($action);
     }
 }

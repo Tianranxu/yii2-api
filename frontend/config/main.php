@@ -55,6 +55,7 @@ return [
             'enableStrictParsing' => true,
             'rules' => [
                 'POST v1/login' => 'v1/login/login',
+                'POST v1/userdata' => 'v1/login/pushUserData',
                 //'GET <module:(v)\d+>/<controller:\w+>/search' => '<module>/<controller>/search',
                 [
                     'class' => 'yii\rest\UrlRule', 

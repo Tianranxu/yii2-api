@@ -28,6 +28,11 @@ class LoginController extends ActiveController {
         return ApiHelper::callback($userInfo);
     }
 
+    public function actionPushUserData(){
+        $request = Yii::$app->request;
+        $postData = $request->post();
+    }
+
     public function getUserInfoFromDB($wxUserInfo){
         $user = Users::find()->where(['openid' => $wxUserInfo['openid']])->one();
         if (empty($user)) {
