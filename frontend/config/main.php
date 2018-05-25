@@ -54,6 +54,7 @@ return [
             'showScriptName' => false,
             'enableStrictParsing' => true,
             'rules' => [
+                'POST login' => 'v1/login/index',
                 //'GET <module:(v)\d+>/<controller:\w+>/search' => '<module>/<controller>/search',
                 [
                     'class' => 'yii\rest\UrlRule', 

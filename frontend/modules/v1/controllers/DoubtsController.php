@@ -23,10 +23,11 @@ class DoubtsController extends ActiveController {
     public function actionOne(){
         $doubtId = Yii::$app->request->post('doubt_id');
         $uid = Yii::$app->request->post('uid');
-        $doubt = ApiHelper::callback(Doubts::findOne($doubtId));
-        $doubt['isLike'] = $redis->sismember('doubtLike:'.$doubtId, $uid);
-        $doubt['isEncourage'] = $redis->sismember('doubtEncourage:'.$doubtId, $uid);
-        return $doubt;
+        $doubt = Doubts::findOne($doubtId);
+        $redis = Yii::$app->redis;
+        $interact['isLike'] = $redis->sismember('doubtLike:'.$doubtId, $uid);
+        $interact['isEncourage'] = $redis->sismember('doubtEncourage:'.$doubtId, $uid);
+        return ApiHelper::callback(['doubt' => $doubt, 'interact' => $interact]);
     }
 
     public function actionLike(){

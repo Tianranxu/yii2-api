@@ -3,10 +3,10 @@
 namespace common\widgets;
 
 class ApiHelper {
-    public static function callback($data, $status = 200, $msg = 'ok'){
+    public static function callback($data, $status = 200, $code = 'ok'){
         return [
             'status' => $status,
-            'msg' => $msg,
+            'code' => $code,
             'data' => $data
         ];
     }
