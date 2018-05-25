@@ -25,10 +25,14 @@ class DoubtsController extends ActiveController {
     }
 
     public function actionLike(){
-
+        $doubt = Doubts::findOne(Yii::$app->request->post('doubt_id'));
+        $result = $doubt->updateCounters(['like_count' => 1]);
+        return ApiHelper::callback($result);
     }
 
     public function actionEncourage(){
-
+        $doubt = Doubts::findOne(Yii::$app->request->post('doubt_id'));
+        $result = $doubt->updateCounters(['encourge_count' => 1]);
+        return ApiHelper::callback($result);
     }
 }

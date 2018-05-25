@@ -13,7 +13,7 @@ use Yii;
  * @property string $edit_agree
  * @property string $source
  * @property int $encourge_count
- * @property int $agree_count
+ * @property int $like_count
  * @property string $author
  * @property string $author_avatar
  * @property int $creat_at
@@ -36,7 +36,7 @@ class Doubts extends \yii\db\ActiveRecord
     {
         return [
             [['reply'], 'string'],
-            [['encourge_count', 'agree_count', 'creat_at'], 'integer'],
+            [['encourge_count', 'like_count', 'creat_at'], 'integer'],
             [['update_at'], 'safe'],
             [['title', 'author', 'author_avatar'], 'string', 'max' => 255],
             [['edit_agree'], 'string', 'max' => 20],
@@ -56,7 +56,7 @@ class Doubts extends \yii\db\ActiveRecord
             'edit_agree' => 'Edit Agree',
             'source' => 'Source',
             'encourge_count' => 'Encourge Count',
-            'agree_count' => 'Agree Count',
+            'like_count' => 'Like Count',
             'author' => 'Author',
             'author_avatar' => 'Author Avatar',
             'creat_at' => 'Creat At',
