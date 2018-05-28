@@ -15,6 +15,7 @@ class QuestionsController extends ActiveController {
         ->orderBy(['sort' => SORT_ASC])->all();
         foreach ($questions as $question) {
             $questionList[] = [
+                'question_id' => $questions->question_id,
                 'question' => $question->content,
                 'options' => $this->setOptionData($question->option)
             ];
@@ -37,7 +38,11 @@ class QuestionsController extends ActiveController {
     }
 
     public function actionAnswer(){
-        
+        $answers = Yii::$app->request->post('answer');
+        $uid = Yii::$app->request->post('uid');
+        foreach ($answers as $answer) {
+            # code...
+        }
         return ApiHelper::callback();
     }
 }
