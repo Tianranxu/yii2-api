@@ -39,14 +39,12 @@ class QuestionsController extends ActiveController {
 
     public function actionAnswer(){
         $answers = Yii::$app->request->post('answer');
-        $uid = Yii::$app->request->post('uid');
-        $time = time();
         if (empty($answers)) {
             return ApiHelper::callback('', 103, 'data error');
         }
 
         $field = ['uid', 'question_id', 'answer', 'create_at'];
-        $userAnswers = $this->setUserAnswer($answers);
+        $userAnswers = $this->setUserAnswer($answers, Yii::$app->request->post('uid'));
         $insertCount = Yii::$app->db->createCommand()
                 ->batchInsert('tbl_user_answer', $field, $userAnswers)
                 ->execute();
@@ -56,7 +54,8 @@ class QuestionsController extends ActiveController {
         return ApiHelper::callback();
     }
 
-    protected function setUserAnswer($answers){
+    protected function setUserAnswer($answers, $uid){
+        $time = time();
         foreach ($answers as $answer) {
             foreach ($answer as $qustionId => $select) {
                 $userAnswers[] = [
