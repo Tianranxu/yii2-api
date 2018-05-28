@@ -83,6 +83,7 @@ class LoginController extends ActiveController {
             'nickname' => empty($user->nickname) ? '' : $user->nickname,
             'avatar' => empty($user->avatarUrl) ? '' : $user->avatarUrl,
             'token' => md5($wxUserInfo['openid'].$wxUserInfo['session_key']),
+            'is_question_done' => $user->is_question_done,
         ];
     }
 

@@ -4,6 +4,7 @@ namespace frontend\modules\v1\controllers;
 use Yii;
 use yii\rest\ActiveController;
 use app\models\Questions;
+use app\models\Users;
 use common\widgets\ApiHelper;
 
 class QuestionsController extends ActiveController {
@@ -39,19 +40,48 @@ class QuestionsController extends ActiveController {
 
     public function actionAnswer(){
         $answers = Yii::$app->request->post('answer');
+        $uid = Yii::$app->request->post('uid');
         if (empty($answers)) {
             return ApiHelper::callback('', 103, 'data error');
         }
 
+        $userAnswers = $this->setUserAnswer($answers, $uid);
+        $result = Yii::$app->request->post('redo') 
+                ? $this->updateUserAnswer($userAnswers) 
+                : $this->insertUserAnswer($userAnswers);
+        if (!$result) {
+            return ApiHelper::callback('', 106, 'db error');    
+        }
+
+        $this->setUserStatus($uid);
+        return ApiHelper::callback();
+    }
+
+    protected function insertUserAnswer($userAnswers) {
         $field = ['uid', 'question_id', 'answer', 'create_at'];
-        $userAnswers = $this->setUserAnswer($answers, Yii::$app->request->post('uid'));
-        $insertCount = Yii::$app->db->createCommand()
+        return Yii::$app->db->createCommand()
                 ->batchInsert('tbl_user_answer', $field, $userAnswers)
                 ->execute();
-        if (!$insertCount) {
-            return ApiHelper::callback('', 106, 'insert error');    
+    }
+
+    protected function updateUserAnswer($userAnswers) {
+        foreach ($userAnswers as $answer) {
+            Yii::$app->db->createCommand()
+                ->update('tbl_user_answer', 
+                    ['answer' => $answer['answer']], 
+                    [
+                        'uid' => $answer['uid'], 
+                        'question_id' => $answer['question_id']
+                    ])
+                ->execute();
         }
-        return ApiHelper::callback();
+        return ;
+    }
+
+    protected function setUserStatus($uid){
+        $user = Users::findOne();
+        $user->is_question_done = 1;
+        return $user->save();
     }
 
     protected function setUserAnswer($answers, $uid){
