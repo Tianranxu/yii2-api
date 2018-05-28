@@ -15,7 +15,7 @@ class QuestionsController extends ActiveController {
         ->orderBy(['sort' => SORT_ASC])->all();
         foreach ($questions as $question) {
             $questionList[] = [
-                'questoin' => $question->content,
+                'question' => $question->content,
                 'options' => $this->setOptionData($question->option)
             ];
         }
@@ -23,7 +23,15 @@ class QuestionsController extends ActiveController {
     }
 
     protected function setOptionData($options){
-        
+        $optionArr = json_decode($options, true);
+        foreach ($optionArr as $value => $text) {
+            $optionList[] = [
+                'value' => $value,
+                'text' => $text,
+                'checked' => false
+            ];
+        }
+        return $optionList;
     }
 
     public function actionAnswer(){
