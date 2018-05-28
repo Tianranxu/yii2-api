@@ -88,7 +88,7 @@ class LoginController extends ActiveController {
 
     public function setUserLoginInfo($userInfo, $httpResult){
         $redis = Yii::$app->redis;
-        $redis->hset('loginUser', $userInfo['token'], $userInfo['uid'].'`'.$httpResult['openid'].'`'.$httpResult['sessionKey']);
+        $redis->hset('loginUser', $userInfo['token'], $userInfo['uid'].'`'.$httpResult['openid'].'`'.$httpResult['session_key']);
         $redis->zadd('recentUser', time(), $userInfo['token']);
         return ;
     }
