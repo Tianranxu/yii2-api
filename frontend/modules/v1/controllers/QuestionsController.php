@@ -40,9 +40,33 @@ class QuestionsController extends ActiveController {
     public function actionAnswer(){
         $answers = Yii::$app->request->post('answer');
         $uid = Yii::$app->request->post('uid');
-        foreach ($answers as $answer) {
-            # code...
+        $time = time();
+        if (empty($answers)) {
+            return ApiHelper::callback('', 103, 'data error');
+        }
+
+        $field = ['uid', 'question_id', 'answer', 'create_at'];
+        $userAnswers = $this->setUserAnswer($answers);
+        $insertCount = Yii::$app->db->createCommand()
+                ->batchInsert('tbl_user_answer', $field, $userAnswers)
+                ->execute();
+        if (!$insertCount) {
+            return ApiHelper::callback('', 106, 'insert error');    
         }
         return ApiHelper::callback();
+    }
+
+    protected function setUserAnswer($answers){
+        foreach ($answers as $answer) {
+            foreach ($answer as $qustionId => $select) {
+                $userAnswers[] = [
+                    'uid' => $uid,
+                    'question_id' => $qustionId,
+                    'answer' => $select,
+                    'create_at' => $time
+                ];
+            }
+        }
+        return $userAnswers;
     }
 }
