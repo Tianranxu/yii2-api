@@ -24,7 +24,7 @@ class LoginController extends ActiveController {
         }
 
         $userInfo = $this->getUserInfoFromDB($httpResult);
-        $this->setUserLoginInfo($userInfo, $httpResult['session_key']);
+        $this->setUserLoginInfo($userInfo, $httpResult);
         return ApiHelper::callback($userInfo);
     }
 
@@ -86,9 +86,9 @@ class LoginController extends ActiveController {
         ];
     }
 
-    public function setUserLoginInfo($userInfo, $sessionKey){
+    public function setUserLoginInfo($userInfo, $httpResult){
         $redis = Yii::$app->redis;
-        $redis->hset('loginUser', $userInfo['token'], $userInfo['uid'].'`'.$userInfo['openid'].'`'.$sessionKey);
+        $redis->hset('loginUser', $userInfo['token'], $userInfo['uid'].'`'.$httpResult['openid'].'`'.$httpResult['sessionKey']);
         $redis->zadd('recentUser', time(), $userInfo['token']);
         return ;
     }
