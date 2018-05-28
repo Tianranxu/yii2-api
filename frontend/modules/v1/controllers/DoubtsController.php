@@ -25,8 +25,8 @@ class DoubtsController extends ActiveController {
         $uid = Yii::$app->request->post('uid');
         $doubt = Doubts::findOne($doubtId);
         $redis = Yii::$app->redis;
-        $interact['isLike'] = $redis->sismember('doubtLike:'.$doubtId, $uid);
-        $interact['isEncourage'] = $redis->sismember('doubtEncourage:'.$doubtId, $uid);
+        $interact['isLike'] = $redis->sismember('doubtLike:'.$doubtId, $uid) ? true : false;
+        $interact['isEncourage'] = $redis->sismember('doubtEncourage:'.$doubtId, $uid) ? true : false;
         return ApiHelper::callback(['doubt' => $doubt, 'interact' => $interact]);
     }
 

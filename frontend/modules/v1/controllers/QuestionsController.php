@@ -11,9 +11,19 @@ class QuestionsController extends ActiveController {
 
     public function actionList(){
         $questions = Questions::find()
-        ->where(['status' => Customer::STATUS_ACTIVE])
+        ->where(['status' => Questions::STATUS_ACTIVE])
         ->orderBy(['sort' => SORT_ASC])->all();
+        foreach ($questions as $question) {
+            $questionList[] = [
+                'questoin' => $question->content,
+                'options' => $this->setOptionData($question->option)
+            ];
+        }
         return ApiHelper::callback();
+    }
+
+    protected function setOptionData($options){
+        
     }
 
     public function actionAnswer(){
