@@ -19,22 +19,25 @@ class QuestionsController extends ActiveController {
                 'options' => $this->setOptionData($question->option)
             ];
         }
-        return ApiHelper::callback();
+        return ApiHelper::callback($questionList);
     }
 
     protected function setOptionData($options){
         $optionArr = json_decode($options, true);
-        foreach ($optionArr as $value => $text) {
-            $optionList[] = [
-                'value' => $value,
-                'text' => $text,
-                'checked' => false
-            ];
+        foreach ($optionArr as $option) {
+            foreach ($option as $value => $text) {
+                $optionList[] = [
+                    'value' => $value,
+                    'text' => $text,
+                    'checked' => false
+                ];
+            }
         }
         return $optionList;
     }
 
     public function actionAnswer(){
+        
         return ApiHelper::callback();
     }
 }
