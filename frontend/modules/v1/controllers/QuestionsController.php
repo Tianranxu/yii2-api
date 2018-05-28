@@ -84,7 +84,7 @@ class QuestionsController extends ActiveController {
 
     protected function setUserStatus($uid){
         $user = Users::findOne($uid);
-        $user->is_question_done = 1;
+        $user->is_question_done = Users::QUESTION_DONE;
         return $user->save();
     }
 

@@ -28,6 +28,8 @@ use Yii;
  */
 class Users extends \yii\db\ActiveRecord
 {
+    const QUESTION_DONE = 1;   //用户已做测试题
+
     /**
      * {@inheritdoc}
      */
