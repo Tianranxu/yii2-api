@@ -69,6 +69,14 @@ return [
                         'POST discourage' => 'discourage',
                     ]
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule', 
+                    'controller' => 'v1/questions',
+                    'extraPatterns' => [
+                        'POST list' => 'list',
+                        'POST answer' => 'answer'
+                    ]
+                ],
             ],
         ],
         
