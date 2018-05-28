@@ -28,11 +28,11 @@ class LoginController extends ActiveController {
         return ApiHelper::callback($userInfo);
     }
 
-    public function actionPushUserData(){
+    public function actionPushuser(){
         $request = Yii::$app->request;
         $redis = Yii::$app->redis;
         $postData = $request->post();
-        $sessionKey = explode('`', $redis->hget('loginUser', $postData['token'], true))[2];
+        $sessionKey = explode('`', $redis->hget('loginUser', $postData['token']))[2];
         if ($postData['signature'] != sha1($postData['rawData'].$sessionKey)) {
             return ApiHelper::callback('', 102, 'signature failed');
         }
@@ -44,7 +44,9 @@ class LoginController extends ActiveController {
         }
 
         $user = Users::findOne($postData['uid']);
-        $user->unionid = $decryptData['unionId'];
+        if (isset($decryptData['unionId'])) {
+            $user->unionid = $decryptData['unionId'];    
+        }
         $user->nickname = $decryptData['nickName'];
         $user->gender = $decryptData['gender'];
         $user->city = $decryptData['city'];
@@ -78,7 +80,6 @@ class LoginController extends ActiveController {
         $user->save();
         return [
             'uid' => $user->uid,
-            'openid' => $wxUserInfo['openid'],
             'nickname' => empty($user->nickname) ? '' : $user->nickname,
             'avatar' => empty($user->avatarUrl) ? '' : $user->avatarUrl,
             'token' => md5($wxUserInfo['openid'].$wxUserInfo['session_key']),

@@ -46,7 +46,7 @@ class Users extends \yii\db\ActiveRecord
             [['user_type', 'gender', 'is_question_done', 'switch_times'], 'integer'],
             [['create_at', 'update_at'], 'safe'],
             [['openid', 'unionid', 'session_key', 'nickname'], 'string', 'max' => 50],
-            [['avatarUrl'], 'string', 'max' => 100],
+            [['avatarUrl'], 'string', 'max' => 200],
             [['city', 'province', 'country'], 'string', 'max' => 40],
             [['language', 'switch_staffs'], 'string', 'max' => 20],
             [['push_token'], 'string', 'max' => 255],
