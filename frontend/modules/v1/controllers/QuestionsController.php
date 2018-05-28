@@ -75,11 +75,11 @@ class QuestionsController extends ActiveController {
                     ])
                 ->execute();
         }
-        return ;
+        return true;
     }
 
     protected function setUserStatus($uid){
-        $user = Users::findOne();
+        $user = Users::findOne($uid);
         $user->is_question_done = 1;
         return $user->save();
     }
