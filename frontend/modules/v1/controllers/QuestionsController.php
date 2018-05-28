@@ -46,14 +46,18 @@ class QuestionsController extends ActiveController {
         }
 
         $userAnswers = $this->setUserAnswer($answers, $uid);
-        $result = Yii::$app->request->post('redo') 
+        $redo = Yii::$app->request->post('redo');
+        $result = $redo
                 ? $this->updateUserAnswer($userAnswers) 
                 : $this->insertUserAnswer($userAnswers);
         if (!$result) {
             return ApiHelper::callback('', 106, 'db error');    
         }
 
-        $this->setUserStatus($uid);
+        if (!$redo) {
+            //only in first time
+            $this->setUserStatus($uid);   
+        }
         return ApiHelper::callback();
     }
 
