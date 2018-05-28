@@ -30,7 +30,39 @@ class LoginController extends ActiveController {
 
     public function actionPushUserData(){
         $request = Yii::$app->request;
+        $redis = Yii::$app->redis;
         $postData = $request->post();
+        $sessionKey = explode('`', $redis->hget('loginUser', $postData['token'], true))[2];
+        if ($postData['signature'] != sha1($postData['rawData'].$sessionKey)) {
+            return ApiHelper::callback('', 102, 'signature failed');
+        }
+
+        $decryptData = $this->decryptData($postData, $sessionKey);
+        if (empty($decryptData) 
+        || $decryptData['watermark']['appid'] != $this->appid) {
+            return ApiHelper::callback('', 103, 'data error');
+        }
+
+        $user = Users::findOne($postData['uid']);
+        $user->unionid = $decryptData['unionId'];
+        $user->nickname = $decryptData['nickName'];
+        $user->gender = $decryptData['gender'];
+        $user->city = $decryptData['city'];
+        $user->province = $decryptData['province'];
+        $user->country = $decryptData['country'];
+        $user->avatarUrl = $decryptData['avatarUrl'];
+        if (!$user->save()) {
+            return ApiHelper::callback('', 104, 'save error');
+        };
+        return ApiHelper::callback();
+    }
+
+    public function decryptData($postData, $sessionKey){
+        $aesKey = base64_decode($sessionKey);
+        $aesIV = base64_decode($postData['iv']);
+        $aesCipher = base64_decode($postData['encryptedData']);
+        $result = openssl_decrypt( $aesCipher, "AES-128-CBC", $aesKey, 1, $aesIV);
+        return json_decode($result, true);
     }
 
     public function getUserInfoFromDB($wxUserInfo){

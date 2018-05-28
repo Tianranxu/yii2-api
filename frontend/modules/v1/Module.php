@@ -26,7 +26,8 @@ class Module extends \yii\base\Module
         return [
             'access' => [
                 'class' => 'frontend\components\WxapiVeriyFilter',
-                'except' => ['login/login']
+                'except' => [
+                    'login/login',                ]
             ]
         ];
     }
