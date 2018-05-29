@@ -57,4 +57,8 @@ class Strategy extends \yii\db\ActiveRecord
             'update_at' => 'Update At',
         ];
     }
+
+    /*public function getUsers() {
+        return $this->hasOne(Users::className(), ['uid' => 'strategy_id']);
+    }*/
 }

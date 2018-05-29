@@ -20,7 +20,7 @@ use Yii;
  * @property string $country
  * @property string $language
  * @property string $switch_staffs
- * @property string $push_token
+ * @property string $form_id
  * @property int $is_question_done
  * @property int $switch_times
  * @property string $create_at
@@ -51,7 +51,7 @@ class Users extends \yii\db\ActiveRecord
             [['avatarUrl'], 'string', 'max' => 200],
             [['city', 'province', 'country'], 'string', 'max' => 40],
             [['language', 'switch_staffs'], 'string', 'max' => 20],
-            [['push_token'], 'string', 'max' => 255],
+            [['form_id'], 'string', 'max' => 255],
             [['openid'], 'unique'],
             [['unionid'], 'unique'],
             [['session_key'], 'unique'],
@@ -77,11 +77,15 @@ class Users extends \yii\db\ActiveRecord
             'country' => 'Country',
             'language' => 'Language',
             'switch_staffs' => 'Switch Staffs',
-            'push_token' => 'Push Token',
+            'form_id' => 'Form Id',
             'is_question_done' => 'Is Question Done',
             'switch_times' => 'Switch Times',
             'create_at' => 'Create At',
             'update_at' => 'Update At',
         ];
+    }
+
+    public function getStrategy(){
+        return $this->hasMany(Strategy::className(), ['strategy_id' => 'uid']);
     }
 }

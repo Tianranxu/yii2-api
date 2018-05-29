@@ -17,7 +17,7 @@ class CollegesController extends ActiveController {
 
         $collegeList = Yii::$app->db->createCommand(
             'SELECT c.college_id,c.college_name,s.subject_id,s.subject_name 
-            FROM tbl_colleges AS c,tbl_college_subject AS cs, tbl_subjects AS s 
+            FROM tbl_colleges AS c,tbl_college_subject AS cs,tbl_subjects AS s 
             WHERE c.college_id=cs.college_id AND s.subject_id=cs.subject_id AND c.province_id='.$provinceId
         )
         ->queryAll();
