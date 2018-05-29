@@ -82,7 +82,7 @@ return [
                     'controller' => 'v1/colleges',
                     'extraPatterns' => [
                         'POST regions' => 'regions',
-                        'POST colleges' => 'colleges'
+                        'POST list' => 'list'
                     ]
                 ],
             ],
