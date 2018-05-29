@@ -13,20 +13,35 @@ class StrategyController extends ActiveController {
         $request = Yii::$app->request;
         $limit = $request->post('limit') ? $request->post('limit') : 5;
         $page = $request->post('page') ? $request->post('page') : 1;
-        $strategy = Strategy::find()
+        $strategys = Strategy::find()
         ->offset($limit*($page-1))
         ->limit($limit)
         ->orderBy(['create_at' => SORT_DESC])->all();
-        return ApiHelper::callback($strategy);
+        foreach ($strategys as $strategy) {
+            $return['strategy'] = $strategy;
+            if ($strategy->uid) {
+                $return['user'] = [
+                    'avatar' => $strategy->avatarUrl,
+                    'nickname' => $strategy->nickname
+                ];
+            }
+        }
+        return ApiHelper::callback($return);
     }
 
     public function actionOne(){
-        $strategyId = Yii::$app->request->post('strategy_id');
-        $strategy = Strategy::findOne($strategy);
-        return ApiHelper::callback(['doubt' => $doubt, 'interact' => $interact]);
+        $strategy = Strategy::findOne(Yii::$app->request->post('strategy_id'));
+        $return['strategy'] = $strategy;
+        if ($strategy->uid) {
+            $return['user'] = [
+                'avatar' => $strategy->users->avatarUrl,
+                'nickname' => $strategy->users->nickname,
+            ];
+        }
+        return ApiHelper::callback($return);
     }
 
-    public function actionUserstrategy(){
+    public function actionUsershare(){
         return ;
     }
 

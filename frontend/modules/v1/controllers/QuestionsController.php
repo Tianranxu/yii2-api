@@ -56,8 +56,9 @@ class QuestionsController extends ActiveController {
 
         if (!$isQuestionDone) {
             //only in first time
-            $this->setUserStatus($uid);   
+            $this->setUserStatus($uid);
         }
+        $this->updateUserToQiyu($userAnswers);
         return ApiHelper::callback();
     }
 
@@ -80,6 +81,10 @@ class QuestionsController extends ActiveController {
                 ->execute();
         }
         return true;
+    }
+
+    protected function updateUserToQiyu($userAnswers){
+        
     }
 
     protected function setUserStatus($uid){

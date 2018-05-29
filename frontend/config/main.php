@@ -85,6 +85,10 @@ return [
                         'POST list' => 'list'
                     ]
                 ],
+                'POST v1/strategy/list' => 'v1/strategy/list',
+                'POST v1/strategy/one' => 'v1/strategy/one',
+                'POST v1/strategy/usershare' => 'v1/strategy/usershare',
+                'POST v1/strategy/subscribe' => 'v1/strategy/subscribe',
             ],
         ],
         
