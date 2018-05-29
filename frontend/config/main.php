@@ -77,6 +77,14 @@ return [
                         'POST answer' => 'answer'
                     ]
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule', 
+                    'controller' => 'v1/colleges',
+                    'extraPatterns' => [
+                        'POST regions' => 'regions',
+                        'POST colleges' => 'colleges'
+                    ]
+                ],
             ],
         ],
         
