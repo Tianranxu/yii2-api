@@ -10,14 +10,30 @@ class CollegesController extends ActiveController {
     public $modelClass = 'app\models\Colleges';
 
     public function actionList(){
+        $provinceId = Yii::$app->request->post('province_id');
+        if (empty($provinceId)) {
+            ApiHelper::callback('', 100, 'empty params');
+        }
+
         $collegeList = Yii::$app->db->createCommand(
-            'SELECT c.college_id,c.college_name,s.subject_id,s.subject_name
-             FROM tbl_colleges AS c,tbl_college_subject AS cs tbl_subjects AS s 
-             WHERE c.college_id=cs.college_id AND s.subject_id=cs.subject_id AND c.province_id='.Yii::$app->request->post('province_id')
+            'SELECT c.college_id,c.college_name,s.subject_id,s.subject_name 
+            FROM tbl_colleges AS c,tbl_college_subject AS cs, tbl_subjects AS s 
+            WHERE c.college_id=cs.college_id AND s.subject_id=cs.subject_id AND c.province_id='.$provinceId
         )
         ->queryAll();
-        var_dump($collegeList);exit;
-        return ;
+
+        foreach ($collegeList as $col) {
+            $colleges[$col['college_id']]['college_id'] = $col['college_id'];
+            $colleges[$col['college_id']]['college_name'] = $col['college_name'];
+            $colleges[$col['college_id']]['subject'][] = [
+                'subject_id' => $col['subject_id'],
+                'subject_name' => $col['subject_name']
+            ];
+        }
+        foreach ($colleges as $college) {
+            $return[] = $college;
+        }
+        return ApiHelper::callback($return);
     }
 
     public function actionRegions(){
