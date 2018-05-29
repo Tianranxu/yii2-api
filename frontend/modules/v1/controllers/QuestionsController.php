@@ -16,7 +16,7 @@ class QuestionsController extends ActiveController {
         ->orderBy(['sort' => SORT_ASC])->all();
         foreach ($questions as $question) {
             $questionList[] = [
-                'question_id' => $questions->question_id,
+                'question_id' => $question->question_id,
                 'question' => $question->content,
                 'options' => $this->setOptionData($question->option)
             ];
@@ -46,15 +46,15 @@ class QuestionsController extends ActiveController {
         }
 
         $userAnswers = $this->setUserAnswer($answers, $uid);
-        $redo = Yii::$app->request->post('redo');
-        $result = $redo
+        $isQuestionDone = Yii::$app->request->post('is_question_done');
+        $result = $isQuestionDone
                 ? $this->updateUserAnswer($userAnswers) 
                 : $this->insertUserAnswer($userAnswers);
         if (!$result) {
             return ApiHelper::callback('', 106, 'db error');    
         }
 
-        if (!$redo) {
+        if (!$isQuestionDone) {
             //only in first time
             $this->setUserStatus($uid);   
         }
