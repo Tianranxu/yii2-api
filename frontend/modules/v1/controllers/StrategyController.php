@@ -17,12 +17,12 @@ class StrategyController extends ActiveController {
         ->offset($limit*($page-1))
         ->limit($limit)
         ->orderBy(['create_at' => SORT_DESC])->all();
-        foreach ($strategys as $strategy) {
-            $return['strategy'] = $strategy;
+        foreach ($strategys as $key => $strategy) {
+            $return[$key]['strategy'] = $strategy;
             if ($strategy->uid) {
-                $return['user'] = [
-                    'avatar' => $strategy->avatarUrl,
-                    'nickname' => $strategy->nickname
+                $return[$key]['user'] = [
+                    'avatar' => $strategy->users->avatarUrl,
+                    'nickname' => $strategy->users->nickname
                 ];
             }
         }
