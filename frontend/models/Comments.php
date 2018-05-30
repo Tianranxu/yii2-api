@@ -31,7 +31,7 @@ class Comments extends \yii\db\ActiveRecord
     {
         return [
             [['comment_id'], 'required'],
-            [['comment_id', 'course_id', 'uid', 'create_at'], 'integer'],
+            [['status', 'comment_id', 'course_id', 'like_count', 'uid', 'create_at'], 'integer'],
             [['content'], 'string'],
             [['update_at'], 'safe'],
             [['comment_id'], 'unique'],
@@ -47,7 +47,9 @@ class Comments extends \yii\db\ActiveRecord
             'comment_id' => 'Comment ID',
             'content' => 'Content',
             'course_id' => 'Course ID',
+            'like_count' => 'Like Count',
             'uid' => 'Uid',
+            'status' => 'Status',
             'create_at' => 'Create At',
             'update_at' => 'Update At',
         ];

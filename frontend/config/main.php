@@ -89,6 +89,25 @@ return [
                 'POST v1/strategy/one' => 'v1/strategy/one',
                 'POST v1/strategy/usershare' => 'v1/strategy/usershare',
                 'POST v1/strategy/subscribe' => 'v1/strategy/subscribe',
+                [
+                    'class' => 'yii\rest\UrlRule', 
+                    'controller' => 'v1/openCourses',
+                    'extraPatterns' => [
+                        'POST list' => 'list',
+                        'POST one' => 'one',
+                        'POST like' => 'like',
+                        'POST unlike' => 'unlike'
+                    ]
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule', 
+                    'controller' => 'v1/comments',
+                    'extraPatterns' => [
+                        'POST list' => 'list',
+                        'POST like' => 'like',
+                        'POST unlike' => 'unlike'
+                    ]
+                ],
             ],
         ],
         
