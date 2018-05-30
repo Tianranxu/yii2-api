@@ -12,7 +12,7 @@ class CollegesController extends ActiveController {
     public function actionList(){
         $provinceId = Yii::$app->request->post('province_id');
         if (empty($provinceId)) {
-            ApiHelper::callback('', 100, 'empty params');
+            ApiHelper::callback('', 100, 'empty pramater');
         }
 
         $collegeList = Yii::$app->db->createCommand(
@@ -30,8 +30,12 @@ class CollegesController extends ActiveController {
                 'subject_name' => $col['subject_name']
             ];
         }
-        foreach ($colleges as $college) {
-            $return[] = $college;
+        if (empty($colleges)) {
+            $return = [];
+        }else{
+            foreach ($colleges as $college) {
+                $return[] = $college;
+            }
         }
         return ApiHelper::callback($return);
     }

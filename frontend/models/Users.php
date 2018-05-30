@@ -86,6 +86,6 @@ class Users extends \yii\db\ActiveRecord
     }
 
     public function getStrategy(){
-        return $this->hasMany(Strategy::className(), ['strategy_id' => 'uid']);
+        return $this->hasMany(Strategy::className(), ['uid' => 'uid']);
     }
 }

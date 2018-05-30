@@ -19,6 +19,8 @@ use Yii;
  */
 class Strategy extends \yii\db\ActiveRecord
 {
+    const SD_SHARE = 1;
+    const USER_SHARE = 2;
     /**
      * {@inheritdoc}
      */
@@ -59,6 +61,6 @@ class Strategy extends \yii\db\ActiveRecord
     }
 
     public function getUsers() {
-        return $this->hasOne(Users::className(), ['uid' => 'strategy_id']);
+        return $this->hasOne(Users::className(), ['uid' => 'uid']);
     }
 }
