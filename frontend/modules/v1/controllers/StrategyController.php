@@ -18,6 +18,7 @@ class StrategyController extends ActiveController {
         ->limit($limit)
         ->orderBy(['create_at' => SORT_DESC])->all();
         foreach ($strategys as $key => $strategy) {
+            $strategy->content = htmlspecialchars_decode($strategy->content);
             $return[$key]['strategy'] = $strategy;
             if ($strategy->uid) {
                 $return[$key]['user'] = [
@@ -31,6 +32,7 @@ class StrategyController extends ActiveController {
 
     public function actionOne(){
         $strategy = Strategy::findOne(Yii::$app->request->post('strategy_id'));
+        $strategy->content = htmlspecialchars_decode($strategy->content);
         $return['strategy'] = $strategy;
         if ($strategy->uid) {
             $return['user'] = [
@@ -42,6 +44,7 @@ class StrategyController extends ActiveController {
     }
 
     public function actionUsershare(){
+
         return ;
     }
 
