@@ -18,14 +18,16 @@ class OpencoursesController extends ActiveController {
         ->offset($limit*($page-1))
         ->limit($limit)
         ->orderBy(['create_at' => SORT_DESC])->all();
-        $return = [];
         foreach ($courses as $key => $course) {
             $course->tag = explode('#', $course->tag);
             $courseList[$key]['course'] = $course;
             $courseList[$key]['isUserLike'] = $this->checkUserLike($course->course_id, $postData['uid']);
         }
-        foreach ($courseList as $cour) {
-            $return[] = $cour;
+        $return = [];
+        if (isset($courseList)) {
+            foreach ($courseList as $cour) {
+                $return[] = $cour;
+            }
         }
         return ApiHelper::callback($return);
     }
