@@ -89,11 +89,11 @@ return [
                 'POST v1/strategy/one' => 'v1/strategy/one',
                 'POST v1/strategy/usershare' => 'v1/strategy/usershare',
                 'POST v1/strategy/subscribe' => 'v1/strategy/subscribe',
-                
-                'POST v1/openCourses/list' => 'v1/openCourses/list',
-                'POST v1/openCourses/one' => 'v1/openCourses/one',
-                'POST v1/openCourses/like' => 'v1/openCourses/like',
-                'POST v1/openCourses/unlike' => 'v1/openCourses/unlike',
+
+                'POST v1/opencourses/list' => 'v1/opencourses/list',
+                'POST v1/opencourses/one' => 'v1/opencourses/one',
+                'POST v1/opencourses/like' => 'v1/opencourses/like',
+                'POST v1/opencourses/unlike' => 'v1/opencourses/unlike',
                 [
                     'class' => 'yii\rest\UrlRule', 
                     'controller' => 'v1/comments',

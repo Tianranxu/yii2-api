@@ -7,7 +7,7 @@ use app\models\OpenCourses;
 use common\widgets\ApiHelper;
 use frontend\modules\v1\controllers\Comments;
 
-class OpenCoursesController extends ActiveController {
+class OpencoursesController extends ActiveController {
     public $modelClass = 'app\models\OpenCourses';
 
     public function actionList(){
