@@ -11,11 +11,13 @@ class CommentsController extends ActiveController {
 
     public function actionList(){
         $post = Yii::$app->request->post();
+        $limit = $post['limit'] ? $post['limit'] : 5;
+        $page = $post['page'] ? $post['page'] : 1;
         $comments = Comments::find()
         ->with('users')
         ->where(['status' => Comments::STATUS_ACTIVE, 'course_id' => $post['course_id']])
-        ->offset($post['limit']*($post['page']-1))
-        ->limit($post['limit'])
+        ->offset($limit*($page-1))
+        ->limit($limit)
         ->orderBy(['create_at' => SORT_DESC])->all();
         $return = [];
         foreach ($comments as $key => $comment) {
@@ -25,7 +27,7 @@ class CommentsController extends ActiveController {
                     'nickname' => $comment->users->nickname,
                     'avatar' => $comment->users->avatarUrl
                 ],
-                'isUserLike' => $this->checkUserLike($post['course_id'], $post['uid'])
+                'isUserLike' => $this->checkUserLike($comment->comment_id, $post['uid'])
             ];
         }
         return ApiHelper::callback($return);
