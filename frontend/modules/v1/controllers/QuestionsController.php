@@ -49,7 +49,7 @@ class QuestionsController extends ActiveController {
         $userAnswers = $this->setUserAnswer($answers, $uid);
         $isQuestionDone = Yii::$app->request->post('is_question_done');
         $result = $isQuestionDone
-                ? $this->updateUserAnswer($userAnswers['option']) 
+                ? $this->updateUserAnswer($userAnswers['options']) 
                 : $this->insertUserAnswer($userAnswers['options']);
         if (!$result) {
             return ApiHelper::callback('', 106, 'db error');    
@@ -59,7 +59,7 @@ class QuestionsController extends ActiveController {
             //only in first time
             $this->setUserStatus($uid);
         }
-        $this->updateUserToQiyu($userAnswers['content'], $uid);
+        $this->updateUserToQiyu($userAnswers['contents'], $uid);
         return ApiHelper::callback();
     }
 
@@ -103,7 +103,7 @@ class QuestionsController extends ActiveController {
         $msgContent['uid'] = $uid;
         $i = 0;
         foreach ($contents as $content) {
-            $msgContent['userinfo'][$i] = ['index' => $i, 'key' => 'question_'.$i, 'label' => '问题'.$i,'value' => $content];
+            $msgContent['userinfo'][$i] = ['index' => $i, 'key' => 'question_'.($i+1), 'label' => '问题'.($i+1),'value' => $content];
             $i++;
         }
         $msgContent['userinfo'][$i] = ['index' => $i, 'key' => 'user_code', 'label' => '用户码','value' => $uid];
