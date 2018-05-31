@@ -49,8 +49,8 @@ class QuestionsController extends ActiveController {
         $userAnswers = $this->setUserAnswer($answers, $uid);
         $isQuestionDone = Yii::$app->request->post('is_question_done');
         $result = $isQuestionDone
-                ? $this->updateUserAnswer($userAnswers) 
-                : $this->insertUserAnswer($userAnswers);
+                ? $this->updateUserAnswer($userAnswers['option']) 
+                : $this->insertUserAnswer($userAnswers['options']);
         if (!$result) {
             return ApiHelper::callback('', 106, 'db error');    
         }
@@ -59,7 +59,7 @@ class QuestionsController extends ActiveController {
             //only in first time
             $this->setUserStatus($uid);
         }
-        $this->updateUserToQiyu($userAnswers);
+        $this->updateUserToQiyu($userAnswers['content'], $uid);
         return ApiHelper::callback();
     }
 
@@ -84,8 +84,30 @@ class QuestionsController extends ActiveController {
         return true;
     }
 
-    protected function updateUserToQiyu($userAnswers){
-        
+    protected function updateUserToQiyu($contents, $uid){
+        $msgContent = $this->setMsgContent($contents, $uid);
+        $url = $this->getQiyuUrl($msgContent);
+        $result = HttpSender::http_post($url, $msgContent);
+        return ;
+    }
+
+    protected function getQiyuUrl($msgContent){
+        $time = time();
+        $appid = 'e8df10a44977d49e025a3542361e5a06';
+        $appsecret = '985D2A3AC62942AA894CD9B8FDE1FEEF';
+        $frontUrl = 'https://qiyukf.com/openapi/event/updateUInfo';
+        return $frontUrl.'?appKey='.$appid.'&time='.$time.'&checksum='.sha1($appsecret . strtolower(md5(json_encode($msgContent))) . $time);
+    }
+
+    protected function setMsgContent($contents, $uid){
+        $msgContent['uid'] = $uid;
+        $i = 0;
+        foreach ($contents as $content) {
+            $msgContent['userinfo'][$i] = ['index' => $i, 'key' => 'question_'.$i, 'label' => '问题'.$i,'value' => $content];
+            $i++;
+        }
+        $msgContent['userinfo'][$i] = ['index' => $i, 'key' => 'user_code', 'label' => '用户码','value' => $uid];
+        return $msgContent;
     }
 
     protected function setUserStatus($uid){
@@ -98,7 +120,11 @@ class QuestionsController extends ActiveController {
         $time = time();
         foreach ($answers as $answer) {
             foreach ($answer as $qustionId => $select) {
-                $userAnswers[] = [
+                if ($qustionId == 'text') {
+                    $userAnswers['contents'][] = $select;    
+                    continue;
+                }
+                $userAnswers['options'][] = [
                     'uid' => $uid,
                     'question_id' => $qustionId,
                     'answer' => $select,
