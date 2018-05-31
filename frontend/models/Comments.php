@@ -16,6 +16,7 @@ use Yii;
  */
 class Comments extends \yii\db\ActiveRecord
 {
+    const STATUS_ACTIVE = 1;
     /**
      * {@inheritdoc}
      */
@@ -53,5 +54,9 @@ class Comments extends \yii\db\ActiveRecord
             'create_at' => 'Create At',
             'update_at' => 'Update At',
         ];
+    }
+
+    public function getUsers() {
+        return $this->hasOne(Users::className(), ['uid' => 'uid']);
     }
 }

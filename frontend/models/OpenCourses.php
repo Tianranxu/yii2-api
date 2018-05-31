@@ -39,7 +39,7 @@ class OpenCourses extends \yii\db\ActiveRecord
             [['course_id', 'viewed_count', 'comment_count', 'like_count', 'create_at'], 'integer'],
             [['introduction'], 'string'],
             [['update_at'], 'safe'],
-            [['title', 'subtitle', 'preview_picture'], 'string', 'max' => 255],
+            [['title', 'subtitle', 'preview_picture', 'video_link'], 'string', 'max' => 255],
             [['duration'], 'string', 'max' => 20],
             [['course_id'], 'unique'],
         ];
@@ -54,6 +54,7 @@ class OpenCourses extends \yii\db\ActiveRecord
             'course_id' => 'Course ID',
             'title' => 'Title',
             'subtitle' => 'Subtitle',
+            'video_link' => 'Video Link',
             'preview_picture' => 'Preview Picture',
             'introduction' => 'Introduction',
             'viewed_count' => 'Viewed Count',

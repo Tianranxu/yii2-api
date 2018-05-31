@@ -44,7 +44,6 @@ class OpencoursesController extends ActiveController {
         $course->tag = explode('#', $course->tag);
         $return = [
             'course' => $course,
-            //'comments' => Comments::getCommentByPage($course->course_id, $postData['uid']),
             'isUserLike' => $this->checkUserLike($course->course_id, $postData['uid']) 
         ];
         return ApiHelper::callback($return);
