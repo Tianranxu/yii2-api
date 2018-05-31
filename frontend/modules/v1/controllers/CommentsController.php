@@ -13,11 +13,27 @@ class CommentsController extends ActiveController {
         $post = Yii::$app->request->post();
         $comments = Comments::find()
         ->with('users')
-        ->where(['status' => Comments::STATUS_ACTIVE, 'comment_id' => $post['comment_id']])
+        ->where(['status' => Comments::STATUS_ACTIVE, 'course_id' => $post['course_id']])
         ->offset($post['limit']*($post['page']-1))
         ->limit($post['limit'])
         ->orderBy(['create_at' => SORT_DESC])->all();
-        var_dump($comments);
+        $return = [];
+        foreach ($comments as $key => $comment) {
+            $return[] = [
+                'comments' => $comment,
+                'user' => [
+                    'nickname' => $comment->user->nickname,
+                    'avatar' => $comment->user->avatarUrl
+                ],
+                'isUserLike' => $this->checkUserLike($post['course_id'], $post['uid'])
+            ];
+        }
+        return ApiHelper::callback($result);
+    }
+
+    protected function checkUserLike($commentId, $uid){
+        $redis = Yii::$app->redis;
+        return $redis->sismember('commentLike:'.$commentId, $uid) ? true : false;
     }
 
     public function actionLike(){
