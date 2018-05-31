@@ -22,13 +22,13 @@ class CommentsController extends ActiveController {
             $return[] = [
                 'comments' => $comment,
                 'user' => [
-                    'nickname' => $comment->user->nickname,
-                    'avatar' => $comment->user->avatarUrl
+                    'nickname' => $comment->users->nickname,
+                    'avatar' => $comment->users->avatarUrl
                 ],
                 'isUserLike' => $this->checkUserLike($post['course_id'], $post['uid'])
             ];
         }
-        return ApiHelper::callback($result);
+        return ApiHelper::callback($return);
     }
 
     protected function checkUserLike($commentId, $uid){
