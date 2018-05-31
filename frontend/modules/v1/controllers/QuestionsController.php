@@ -6,6 +6,7 @@ use yii\rest\ActiveController;
 use app\models\Questions;
 use app\models\Users;
 use common\widgets\ApiHelper;
+use common\widgets\HttpSender;
 
 class QuestionsController extends ActiveController {
     public $modelClass = 'app\models\Questions';

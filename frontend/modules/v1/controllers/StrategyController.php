@@ -18,6 +18,7 @@ class StrategyController extends ActiveController {
         ->offset($limit*($page-1))
         ->limit($limit)
         ->orderBy(['create_at' => SORT_DESC])->all();
+        $return = [];
         foreach ($strategys as $key => $strategy) {
             $strategy->content = htmlspecialchars_decode($strategy->content);
             $return[$key]['strategy'] = $strategy;
