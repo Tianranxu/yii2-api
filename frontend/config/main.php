@@ -100,6 +100,7 @@ return [
                     'extraPatterns' => [
                         'POST list' => 'list',
                         'POST like' => 'like',
+                        'POST usercomment' => 'usercomment',
                         'POST unlike' => 'unlike'
                     ]
                 ],

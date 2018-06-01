@@ -38,6 +38,15 @@ class CommentsController extends ActiveController {
         return $redis->sismember('commentLike:'.$commentId, $uid) ? true : false;
     }
 
+    public function actionUsercomment(){
+        $post = Yii::$app->request->post();
+        $comment = new Comments();
+        $comment->uid = $post['uid'];
+        $comment->course_id = $post['course_id'];
+        $comment->content = $post['content'];
+        return ApiHelper::callback($comment->save());
+    }
+
     public function actionLike(){
         $commentId = Yii::$app->request->post('comment_id');
         $comment = Comments::findOne($commentId);
