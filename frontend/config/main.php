@@ -104,6 +104,7 @@ return [
                         'POST unlike' => 'unlike'
                     ]
                 ],
+                'POST v1/classes/list' => 'v1/classes/list',
             ],
         ],
         
