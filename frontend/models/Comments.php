@@ -31,11 +31,9 @@ class Comments extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['comment_id'], 'required'],
             [['status', 'comment_id', 'course_id', 'like_count', 'uid', 'create_at'], 'integer'],
             [['content'], 'string'],
             [['update_at'], 'safe'],
-            [['comment_id'], 'unique'],
         ];
     }
 

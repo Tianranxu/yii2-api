@@ -44,7 +44,7 @@ class CommentsController extends ActiveController {
         $comment->uid = $post['uid'];
         $comment->course_id = $post['course_id'];
         $comment->content = $post['content'];
-        $comment->creat_at = time();
+        $comment->create_at = time();
         if (!$comment->save()) {
             return ApiHelper::callback('', 106, 'db error');
         }
