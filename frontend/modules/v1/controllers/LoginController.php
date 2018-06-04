@@ -71,8 +71,9 @@ class LoginController extends ActiveController {
             'uid' => $post['uid'],
             'site_id' => $post['site_id'],
             'army_id' => $post['army_id'],
-            'group_id' => $this->getGroupByArmy($post['army_id']),
+            'group_id' => empty($post['army_id']) ? '' : $this->getGroupByArmy($post['army_id']),
             'source' => $post['source'],
+            'isDefaultSite' => ($post['site_id'] == $this->defaultSiteId) ? 1 : 0,
             'create_at' => time()
         ];
         $result = Yii::$app->db->createCommand()
@@ -85,11 +86,8 @@ class LoginController extends ActiveController {
     }
 
     protected function getGroupByArmy($armyId){
-        if (empty($armyId)) {
-            return '';
-        }
         return Yii::$app->db->createCommand(
-            "SELECT army_id,site_id
+            "SELECT army_id,group_id
              FROM tbl_armys
              WHERE army_id={$armyId}")
         ->queryOne();
@@ -99,7 +97,7 @@ class LoginController extends ActiveController {
         return Yii::$app->db->createCommand(
             "SELECT uid,site_id
              FROM tbl_user_source
-             WHERE uid={$post['uid']} AND site_id={$post['site_id']}" 
+             WHERE uid={$post['uid']} AND site_id='{$post['site_id']}'" 
         )
         ->queryOne();
     }
