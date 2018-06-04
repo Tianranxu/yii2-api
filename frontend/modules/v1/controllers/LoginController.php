@@ -11,6 +11,7 @@ class LoginController extends ActiveController {
     public $modelClass = 'app\models\Users';
     protected $appid = 'wx5685e2ad262dc005';
     protected $appsecret = 'a95d09b34d9df6a7fc31a926e88874d4';
+    protected $defaultSiteId = 'default_site_id';
 
     public function actionLogin() {
         $code = Yii::$app->request->post('code');
@@ -57,6 +58,49 @@ class LoginController extends ActiveController {
             return ApiHelper::callback('', 104, 'save error');
         };
         return ApiHelper::callback();
+    }
+
+    public function actionUsersite(){
+        $post = Yii::$app->request->post();
+        if (!empty($this->getUserSite($post))) {
+            return ApiHelper::callback();
+        }
+
+        $field = ['uid', 'site_id', 'army_id', 'group_id', 'source', 'create_at'];
+        $userSite = [
+            'uid' => $post['uid'],
+            'site_id' => empty($post['site_id']) ? $this->defaultSiteId : $post['site_id'],
+            'army_id' => $post['army_id'],
+            'group_id' => $this->getGroupByArmy($post['army_id']),
+            'source' => $post['source'],
+            'create_at' => time()
+        ];
+        $result = Yii::$app->db->createCommand()
+        ->insert('tbl_user_source', $field, $userSite)
+        ->execute();
+        if (!$result) {
+            return ApiHelper::callback('', 106, 'db error');
+        }
+        return ApiHelper::callback();
+    }
+
+    protected function getGroupByArmy($armyId){
+        if (empty($armyId)) {
+            return '';
+        }
+        return Yii::$app->db->createCommand()
+        ->select(['army_id', 'group_id'])
+        ->from('tbl_armys')
+        ->where(['army_id' => $armyId])
+        ->one();
+    }
+
+    protected function getUserSite($post){
+        return Yii::$app->db->createCommand()
+        ->select(['uid', 'site_id'])
+        ->from('tbl_user_source')
+        ->where(['uid' => $post['uid'], 'site_id' => $post['site_id']])
+        ->one();
     }
 
     public function decryptData($postData, $sessionKey){
