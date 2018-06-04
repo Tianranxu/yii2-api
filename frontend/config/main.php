@@ -56,6 +56,7 @@ return [
             'rules' => [
                 'POST v1/login' => 'v1/login/login',
                 'POST v1/userdata' => 'v1/login/pushuser',
+                'POST v1/usersite' => 'v1/login/usersite',
                 //'GET <module:(v)\d+>/<controller:\w+>/search' => '<module>/<controller>/search',
                 [
                     'class' => 'yii\rest\UrlRule', 

@@ -62,21 +62,21 @@ class LoginController extends ActiveController {
 
     public function actionUsersite(){
         $post = Yii::$app->request->post();
+        $post['site_id'] = empty($post['site_id']) ? $this->defaultSiteId : $post['site_id'];
         if (!empty($this->getUserSite($post))) {
             return ApiHelper::callback();
         }
 
-        $field = ['uid', 'site_id', 'army_id', 'group_id', 'source', 'create_at'];
         $userSite = [
             'uid' => $post['uid'],
-            'site_id' => empty($post['site_id']) ? $this->defaultSiteId : $post['site_id'],
+            'site_id' => $post['site_id'],
             'army_id' => $post['army_id'],
             'group_id' => $this->getGroupByArmy($post['army_id']),
             'source' => $post['source'],
             'create_at' => time()
         ];
         $result = Yii::$app->db->createCommand()
-        ->insert('tbl_user_source', $field, $userSite)
+        ->insert('tbl_user_source', $userSite)
         ->execute();
         if (!$result) {
             return ApiHelper::callback('', 106, 'db error');
@@ -88,19 +88,20 @@ class LoginController extends ActiveController {
         if (empty($armyId)) {
             return '';
         }
-        return Yii::$app->db->createCommand()
-        ->select(['army_id', 'group_id'])
-        ->from('tbl_armys')
-        ->where(['army_id' => $armyId])
-        ->one();
+        return Yii::$app->db->createCommand(
+            "SELECT army_id,site_id
+             FROM tbl_armys
+             WHERE army_id={$armyId}")
+        ->queryOne();
     }
 
     protected function getUserSite($post){
-        return Yii::$app->db->createCommand()
-        ->select(['uid', 'site_id'])
-        ->from('tbl_user_source')
-        ->where(['uid' => $post['uid'], 'site_id' => $post['site_id']])
-        ->one();
+        return Yii::$app->db->createCommand(
+            "SELECT uid,site_id
+             FROM tbl_user_source
+             WHERE uid={$post['uid']} AND site_id={$post['site_id']}" 
+        )
+        ->queryOne();
     }
 
     public function decryptData($postData, $sessionKey){
